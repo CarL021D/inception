@@ -9,7 +9,6 @@ RUN apt-get install -y openssl
 #generate self-sign ssl/tls certificate
 RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=caboudar.42.fr/UID=caboudar"
 
-# this folder is going to stock socket data of our web server(nginx)
 RUN mkdir -p /var/run/nginx
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
