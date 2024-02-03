@@ -5,17 +5,21 @@ RUN apt-get upgrade -y
 RUN apt-get install -y wget
 RUN apt-get install -y php7.3 php-fpm php-mysql
 
+# enable you to configurate the wordpress via an a termianal in addition to the world press  config page
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
 RUN apt-get update && apt-get install -y default-mysql-client
 RUN apt-get install -y mariadb-client
+# enables you to dowload the wordpress installation and extract the worpress
 RUN wget https://wordpress.org/wordpress-6.1.1.tar.gz -P /var/www/html
+# This downloads WordPress version 6.1.1, extracts it to the /var/www/html directory, and removes the downloaded tarball
 RUN cd /var/www/html \
 	&& tar -xzf /var/www/html/wordpress-6.1.1.tar.gz \
 	&& rm /var/www/html/wordpress-6.1.1.tar.gz
 
+# ensuere that we can use the web server
 RUN chown -R www-data:www-data /var/www/*
 RUN chmod -R 755 /var/www/*
 
