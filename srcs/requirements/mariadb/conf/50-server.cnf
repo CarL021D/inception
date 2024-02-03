@@ -1,4 +1,5 @@
 [mysqld]
+
 user				= mysql
 basedir				= /usr
 datadir				= /var/lib/mysql
