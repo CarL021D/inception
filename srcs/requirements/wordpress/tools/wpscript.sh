@@ -4,10 +4,10 @@
 cd /var/www/html/wordpress
 
 if ! wp core is-installed; then
-wp config create	--allow-root --dbname=${SQL_DATABASE} \
-			--dbuser=${SQL_USER} \
-			--dbpass=${SQL_PASSWORD} \
-			--dbhost=${SQL_HOST} \
+wp config create	--allow-root --dbname=${MARIADB_DATABASE} \
+			--dbuser=${MARIADB_USER} \
+			--dbpass=${MARIADB_PASSWORD} \
+			--dbhost=${MARIADB_HOST} \
 			--url=https://${DOMAIN_NAME};
 
 wp core install	--allow-root \

@@ -1,5 +1,3 @@
-#creat 'data' folder in /home/caboudar/
-
 all: 
 	mkdir -p /home/caboudar/data/mariadb
 	mkdir -p /home/caboudar/data/wordpress
