@@ -1,33 +1,29 @@
-FROM debian:bullseye
+FROM	debian:bullseye
 
-RUN apt-get update -y
-RUN apt-get upgrade -y
-RUN apt-get install -y wget
-RUN apt-get install -y php7.3 php-fpm php-mysql
+LABEL	author="caboudar"
+LABEL	version="1.0"
 
-# enable you to configurate the wordpress via an a termianal in addition to the world press  config page
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-	&& chmod +x wp-cli.phar \
-	&& mv wp-cli.phar /usr/local/bin/wp
+RUN	mkdir -p /var/www/html
+RUN	mkdir -p /run/php
 
-RUN apt-get update && apt-get install -y default-mysql-client
-RUN apt-get install -y mariadb-client
-# enables you to dowload the wordpress installation and extract the worpress
-RUN wget https://wordpress.org/wordpress-6.1.1.tar.gz -P /var/www/html
-# This downloads WordPress version 6.1.1, extracts it to the /var/www/html directory, and removes the downloaded tarball
-RUN cd /var/www/html \
-	&& tar -xzf /var/www/html/wordpress-6.1.1.tar.gz \
-	&& rm /var/www/html/wordpress-6.1.1.tar.gz
+RUN	apt update -y
+RUN	apt upgrade -y
+RUN	apt install wget -y
+RUN	apt install -y php7.4 php-fpm php-mysql php-common php-cgi php-cli mariadb-client vim
 
-# ensuere that we can use the web server
-RUN chown -R www-data:www-data /var/www/*
-RUN chmod -R 755 /var/www/*
+RUN	wget https://fr.wordpress.org/wordpress-6.2.2-fr_FR.tar.gz -P /var/www
+RUN	tar -xzf /var/www/wordpress-6.2.2-fr_FR.tar.gz -C /var/www/.
+RUN	cp -r /var/www/wordpress/. /var/www/html
+RUN	rm /var/www/wordpress-6.2.2-fr_FR.tar.gz
 
-EXPOSE 9000
+RUN	wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN 	chmod +x wp-cli.phar
 
-COPY ./tools/wpscript.sh ./
-RUN chmod +x ./wpscript.sh
+EXPOSE	9000
 
-COPY ./tools/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY	conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY 	tools/config_wp.sh config_wp.sh
 
-ENTRYPOINT ["bash", "./wpscript.sh"]
+RUN		chmod +x config_wp.sh
+
+CMD ["./config_wp.sh"]
